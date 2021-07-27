@@ -1,0 +1,43 @@
+version: '3.4'
+
+services:
+  rabbitmq:
+      image: rabbitmq:3-management-alpine
+      container_name: rabbitmq
+      ports:
+        - "15672:15672"
+        - "5672:5672"
+      environment:
+        - RABBITMQ_DEFAULT_USER=sa
+        - RABBITMQ_DEFAULT_PASS=password@123
+
+  webapp:
+    image: ${DOCKER_REGISTRY-}webapp
+    build:
+      context: .
+      dockerfile: WebApp/Dockerfile
+
+  restaurantmanagementapi:
+    image: ${DOCKER_REGISTRY-}restaurantmanagementapi
+    build:
+      context: .
+      dockerfile: RestaurantManagementAPI/Dockerfile
+    depends_on:
+    - db
+  db:
+    image: postgres:latest
+    environment:
+        POSTGRES_PASSWORD: password@123
+        POSTGRES_USER: sa
+    ports:
+        - "54063:5432"
+
+
+  customermanagementapi:
+    image: ${DOCKER_REGISTRY-}customermanagementapi
+    build:
+      context: .
+      dockerfile: CustomerManagementAPI/Dockerfile
+    depends_on:
+    - db
+

@@ -1,0 +1,122 @@
+﻿@model IEnumerable<WebApp.Models.Restaurants>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>*@
+            @*<th></th>*@
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td> Restaurants </td>
+            <td>
+                @Html.DropDownList("Restaurants", (IEnumerable
+                <SelectListItem>)ViewBag.retaurants)
+            </td>
+
+        </tr>
+        <tr>
+            <td> items </td>
+            <td>
+                @Html.DropDownList("items", (IEnumerable
+                <SelectListItem>)ViewBag.restItems)
+            </td>
+
+        </tr>
+        <tr>
+            <td> Order </td>
+            <td>
+                @*<input type="button"
+                    value="Go Somewhere Else"
+                    onclick="location.href='<%: Url.Action(" Action", "Controller" ) %>'" />*@
+
+                <input type="button" value="Create" onclick="oorderClickHandle()" />
+            </td>
+
+        </tr>
+
+    </tbody>
+</table>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+
+    function oorderClickHandle() {
+        var id = $(this).find(":selected").val()
+        var selectid = { "id": id }
+        let data = {
+            "restId": "",
+            "ItemId": ""
+        };
+        $.ajax({
+            url: "/Customer/Order",
+            data: JSON.stringify(selectid),
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                // Variable data contains the data you get from the action method
+            }
+        });
+    }
+
+    $("#YourDropdownID").change(function () {
+        var id = $(this).find(":selected").val()
+        var selectid = { "id": id }
+        $.ajax({
+            url: "/Home/GetSelectedValue",
+            data: JSON.stringify(selectid),
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                // Variable data contains the data you get from the action method
+            }
+        });
+    });
+</script>
